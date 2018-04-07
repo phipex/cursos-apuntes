@@ -2,9 +2,10 @@
 **TODO**:Cantidades de regiones actuales, con zonas de disponibilidad?
 
 # Definiciones
-**Region**: Area geografica, consta de dos o mas AZ.
-**AZ (Zona disponibilidad)**: es un centro de datos.
-**Ubicacion de Borde**: Puntos finales de red de entrega de contenidos (CDN) para cloudFront
+- **Region**: Area geografica, consta de dos o mas AZ.
+- **AZ (Zona disponibilidad)**: es un centro de datos.
+- **Ubicacion de Borde**: Puntos finales de red de entrega de contenidos (CDN) para cloudFront.
+- **AMI (Amazon Machine Image)**: Plantillas de las instancias 
 
 # Lista de servicios
 
@@ -74,23 +75,24 @@
 - CodePipeline: Servicio de entrega continua
 
 ## Servicios Moviles
-- Mobile Hub: Para probar aplicaciones mobiles en varios dispositivos
-- Cognito: Guardar datos en la nube de las aplicaciones
-- Device Farm: pruebas calidad para diferentes dispositivos
-- Mobile Analytics: estadísticas de los aplicaciones
-- SNS: Servicio de notificacion simple
+- Mobile Hub: Para probar aplicaciones mobiles en varios dispositivos.
+- Cognito: Guardar datos en la nube de las aplicaciones.
+- Device Farm: pruebas calidad para diferentes dispositivos.
+- Mobile Analytics: estadísticas de los aplicaciones.
+- SNS: Servicio de notificacion simple.
 
 ## Aplicaciones de Empresas
 - WorkSpaces: escritorios virtuales en la nuve (windows)
 - WorkDocs: es como google docs
 - WorkMail: Servicio de schange
 
-##Internet de las Cosas
+## Internet de las Cosas
 - Internet of Things
 
 
 # Almacenamiento
 ## S3
+- Puedo tener 100 contenedores.
 - Es basado en objetos par clave valor donde la clave es el nombre y el valor es el binario.
 - deben pesar entre 1byte hasta 5 TB.
 - No tiene limite de almacenamiento.
@@ -101,7 +103,7 @@
 - Tipos de S3
 	- S3 (Durable, disponible inmediatamente, acceso frecuente).
 	- S3-IA (durable, disponible inmediatamente, acceso esporadico).
-	- S3- ARR (almacenamiento de redundancia redudica): Datos que son facilmente reproducibles pero que se pueden perder.
+	- S3-RRS (almacenamiento de redundancia redudica): Datos que son facilmente reproducibles pero que se pueden perder.
 	- **Glacier** Datos archivados, en los cuales es aceptable una demora de 3 a 5 horas para el acceso (no puede ser publico).
 - Bases fundamentales de S3:
 	- Clave (Nombre).
@@ -147,28 +149,68 @@ Se puede habilitar un log del registro de acceso.
 Hay dos tipos de Encriptacion
 
 - En transito (desde o hasta el contenedor):
- 	-- SSL/TLS 
+ 	- SSL/TLS 
  
 - En Repaso
-	--Servidor
-		- Claves aministradas por S3 (desde la interfaz): SSE-S3
-		- Servicios de Administracion de claves (servicio estra): SSE-KMS
-		- Encriptacion en Origen con claves Proporcionadas por el cliente: SSE-C
-	--Encriptacion en Destino
+	- Servidor
+		- Claves aministradas por S3 (desde la interfaz): **SSE-S3**
+		- Servicios de Administracion de claves (servicio estra): **SSE-KMS**
+		- Encriptacion en Origen con claves Proporcionadas por el cliente: **SSE-C**
+	- Encriptacion en Destino
 		- Encriptados por el usuario
 
 
 # Puerta de Enlace de Almacenamiento: 
-Sistema de espejo mediante un sistema virtualizado, instalado en el centro de datos propio que guarda la copia en AWS, hay dos tipos:
-- Volumenes almacenados: respalda los datos asincronicamente guardados localmente.
-- Volumenes en cache: los que son requeridos mas comunes son guardado localmente y el resto en S3.
-- Libreria de Cinta Virtual: coleccion de cintas virtuales para guardar datos de sistemas de datos como NetBackup, Backup Exec, Veam, etc. 
+Sistema de espejo mediante un sistema virtualizado, instalado en el centro de datos propio que guarda la copia en AWS, hay dos tipos: 
+
+- Volumenes almacenados: respalda los datos asincronicamente guardados localmente(tipicamente cuando hay Problemas de conectividad y total de datos).
+- Volumenes en cache: los que son requeridos mas comunes son guardado localmente y el resto en S3 (tipicamente cuando la Conectividad no es problema, se quiere ahorar en gastos).
+- Libreria de Cinta Virtual: coleccion de cintas virtuales para guardar datos de sistemas de datos como NetBackup, Backup Exec, Veam, etc(cuando se quiere respaldar las cintas). 
 
 # Importar y exportar
 ## Importar/exportar Disco
 Copiar datos en un disco y se envía a amazon físicamente, ellos lo copian en algún sistema de almacenamiento como S3, EBS, Gracier.
+
+- Importa hacia EBS.
+- Importa hacia S3.
+- Importa hacia Glaciar.
+- Exporta desde S3
+
 ## Importar/exportar Bola de nieve
-Hardware  que se alquila para la transferencia de datos a S3 
+Hardware  que se alquila para la transferencia de datos a S3. 
+
+#EC2 (Elastic Compute Cloud)
+- Lanzar rapido.
+- Escalar recursos hacia arriba o hacia abajo.
+- Modelos de Precios:
+ - A demandada: solo por el tiempo que se use, sin compromiso, se puede eliminar despues (Tipicamente usado mantener costos bajos, no tener un contrato, aplicaciones que no son continuas, que tienen picos de trabajo y no deben ser interrumpidas, aplicaciones solo para probar o desarrollo, picos esperados en aplicaciones continuas).
+ - Reservada: por uno o por 3 años (Aplicaciones estables, con recursos esperados).
+ - Subasta: se compra por una hora o mas, sin compromiso y por lo general es mucho mas barato, pero no es fijo, pueden ser terminadas por amazon (Tipicamente para mejores precios, computo corto).
+- Tipos de instancia:
+
+ - T2: Bajo Costo, Proposito General, por ejemplo para servidores web y pequeñas bases de datos.
+ - M4,M3: Proposito general usadas para servidores de aplicaciones.
+ - C4,C3: Computo optimizado para aplicaciones con mayor uso de cpu o bases de datos.
+ - R3: Memoria optimizada para aplicaciones o bases de datos de mas uso de momoria
+ - G2: Uso de tarjetas graficas o que necesiten mucho un gpu, por ejemplo aplicaciones de codificacion de video, transmision de estreming, machine learning.
+ - I2: Almacenamiento de alta velocidad usadas por ejemplo para analisis de grandes bases de datos. 
+ - D2: Gran almacenamiento por ejemplo data warehousing, hadoop.
+
+# EBS (Stored Blocl Elastic)
+Discos duros virtuales que permite agregarlos a las instancias, pero solo una a la ves.
+
+Tipos de Volumenes EBS:
+
+- Proposito General SSD (GP2):
+  - 99.999% de disponibilad.
+  - 3 IOPS (entrada/salida) por GB y hasta 10.000 IOPS, puede llear hasta los 3000 IOPS por periodos cortos en volumenes por debajo de 1 GB.
+- IOPS aprovisionado SSD (IO1):
+  - Para aplicaciones de uso intesivo de E/S, como bases de datos, usadas generalmente mas de 10.000 IOPS.
+- Magnetico (Standard):
+  - Menor costo.
+  - Ideales para cuando no son accedidos frecuentemente, ejemplo almacenes de archivo.
+  - Ideales para el costo de almecenamiento es importante.
+
 		 
 
 
