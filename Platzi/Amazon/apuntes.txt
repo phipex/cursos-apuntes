@@ -1,0 +1,26 @@
+Servicios AWS
+
+EC2 ------> Instancias (windows,linux)
+Route S3 ------> Administración de DNS Dominios
+VPC ------> Administración redes Interna
+
+Storage.
+
+CloudFront ----> Administración CDN
+Glacier -------> Almacenamiento de archivos estáticos principlamente backup muchos años
+S3 -------> Guardar archivos Dinamicos para alta disponibilidad
+
+Base de datos
+
+Soporte para relacionales y no relacionales.
+
+Devops
+
+CloudFormation
+CloudWatch -> monitoreo
+IAM seguridad
+OPS WORKS
+
+Análisis de datos
+Map reduce
+Kinosis
