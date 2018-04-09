@@ -211,8 +211,35 @@ Tipos de Volumenes EBS:
   - Ideales para cuando no son accedidos frecuentemente, ejemplo almacenes de archivo.
   - Ideales para el costo de almecenamiento es importante.
 
-		 
+#Grupos de seguridad
+- Todo el trafico entrante esta bloqueado.
+- Todo el trafico saliente esta bloqueado.
+- Los cambios se ven reflejados inmediatemanete.
+- Se puede asignar un mismo grupo a varias instancias.
+- Los grupos de seguridad son stateful, es decir cualquiera que se configura de entrada queda automaticamente de salida.
 
+#Volumenes,Snapshots, RAID
+
+- Los volumenes existen en los EBS (Disco duro virtual).
+- Snapshots se crean en S3.
+- Los snapshots son incrementales, es decir que se copian los ultimos cambios.
+- Los snapshots de volumenes encriptados, se encriptan automaticamente.
+- Los volumenes restaurados de snapshots encriptados, se encriptan automaticamente.
+- Se pueden compartir con otras cuentas o ponerlo publico mientras no este encriptado.
+- Para crear un snapshot de un volumen raiz, se debe detener la instancia, sino amazon lo hace por uno.
+- RAID (Arreglo de discos redundantes independientes), varios volumenes aparecen en el sistema operativo como uno solo.
+- RAID 0: Lineal, Sin redundancia, Buen desempeño (si se daña un disco, el arreglo se daña).
+- RAID 1: Espejado, Redundancia (si un disco falla se puede usar el resto).
+- RAID 5: Bueno para lectura, malo para escritura, guarda paridad del los otros (no recomienda).
+- RAID 10: Lineal & espejado, Buena Redundancia, buen desempeño.
+- Un ejemplo de cuando se usa RAID, se necesita mas IOPS de E/S.
+
+#Balanceador de Carga
+- Puede esta en servicio o fuera de el.
+- Se definen chequeos de salud, umbrales de caida, duracion e intervalo.
+- Es por direccion, no se le puede asignar una ip.
+
+ 
 
 
 
